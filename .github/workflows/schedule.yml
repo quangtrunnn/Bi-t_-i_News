@@ -2,9 +2,12 @@ name: Stock News Bot
 
 on:
   schedule:
-    # Lịch mới: 8:30, 11:00, 14:00, 16:30, 20:30 giờ VN
-    - cron: '30 1,9,13 * * *'
-    - cron: '0 4,7 * * *'
+    # Chạy vào phút 00: (07:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 19:00, 21:00 VN)
+    # Tương đương: 0, 4, 5, 6, 7, 8, 9, 12, 14 giờ UTC
+    - cron: '0 0,4,5,6,7,8,9,12,14 * * *' 
+    # Chạy vào phút 30: (08:30, 09:30 VN)
+    # Tương đương: 1, 2 giờ UTC
+    - cron: '30 1,2 * * *'
 
   # Dòng này để mày có thể bấm nút chạy thử thủ công
   workflow_dispatch:
