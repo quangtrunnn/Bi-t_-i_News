@@ -1,0 +1,6 @@
+requests
+vnstock
+pandas
+pytz
+feedparser
+lxml
