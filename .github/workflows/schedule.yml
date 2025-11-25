@@ -2,7 +2,7 @@ name: Stock News Bot
 
 on:
   schedule:
-    # Lịch chạy 30 phút/lần
+    # Lịch chạy cứ 30 phút một lần
     - cron: '*/30 * * * *'
 
   workflow_dispatch:
@@ -12,13 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. TẢI CACHE: Đọc file sent_links.txt cũ
+      # 1. TẢI CACHE (RESTORE): Đọc file sent_links.txt cũ
       - name: Restore Sent Links Cache
-        id: cache-restore # Gán ID để tham chiếu sau này
+        id: cache-restore 
         uses: actions/cache@v3
         with:
           path: sent_links.txt
-          key: ${{ runner.os }}-sent-links-{%- set day = 'now' | date('Ymd') %}{{ day }} # Thêm ngày vào key để tránh cache bị quá cũ
+          # Sử dụng hash của main.py làm key để nếu bạn thay đổi main.py, cache sẽ được làm mới
+          key: ${{ runner.os }}-sent-links-${{ hashFiles('main.py') }} 
 
       # 2. Checkout code (Giữ nguyên)
       - name: Checkout code
@@ -34,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # 5. CHẠY BOT (Lúc này file sent_links.txt đã được cập nhật)
+      # 5. CHẠY BOT (File sent_links.txt được cập nhật)
       - name: Run Bot
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -42,11 +43,12 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python main.py
         
-      # 6. LƯU CACHE (BƯỚC MỚI VÀ QUAN TRỌNG NHẤT!)
+      # 6. LƯU CACHE (SAVE): LƯU file sent_links.txt mới
+      # BƯỚC NÀY KHẮC PHỤC HOÀN TOÀN LỖI LẶP TIN
       - name: Save Sent Links Cache
         uses: actions/cache@v3
-        # Chỉ lưu nếu có thay đổi (tức là key không khớp với key đã restore)
-        if: always() # Luôn chạy bước này
+        # if: always() đảm bảo bước này chạy kể cả khi bot không tìm thấy tin mới (để lưu cache)
+        if: always() 
         with:
           path: sent_links.txt
-          key: ${{ runner.os }}-sent-links-{%- set day = 'now' | date('Ymd') %}{{ day }}
+          key: ${{ runner.os }}-sent-links-${{ hashFiles('main.py') }}
