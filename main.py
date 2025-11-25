@@ -4,13 +4,15 @@ import feedparser
 from datetime import datetime
 import pytz
 
+# Tên file lưu trữ các link đã gửi (Trạng thái)
+SENT_LINKS_FILE = 'sent_links.txt' 
+
 # --- CẤU HÌNH ---
 RSS_SOURCES = [
     # --- 4 Nguồn cũ ---
     "https://cafef.vn/thi-truong-chung-khoan.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
     "https://nguoiquansat.vn/thi-truong.rss",
-  
     
     # --- 12 Nguồn VnEconomy mới ---
     "https://vneconomy.vn/tin-moi.rss",
@@ -38,24 +40,19 @@ FOOTER_TEXT = """
 🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
 """
 
-# Hàm xác định màu icon
+# Hàm xác định màu icon (Giữ nguyên logic)
 def get_icon(title):
     title_lower = title.lower()
-
-    # Keywords Tích cực (Bao gồm Thị trường, Chính sách, Kinh tế Vĩ mô)
     positive_keywords = [
         'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 
         'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 'đóng góp',
         'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức','động lực', 'mạnh mẽ'
     ]
-
-    # Keywords Tiêu cực (Bao gồm Rủi ro, Thanh tra, Giảm điểm/lỗ)
     negative_keywords = [
         'giảm', 'lỗ', 'thủng', 'đáy', 'bán tháo', 'lao dốc', 
         'siết chặt', 'kiểm tra', 'thanh tra', 'điều tra', 'phạt', 'khẩn cấp',
         'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng'
     ]
-
     if any(w in title_lower for w in positive_keywords):
         return "🟢"
     elif any(w in title_lower for w in negative_keywords):
@@ -63,24 +60,58 @@ def get_icon(title):
     else:
         return "🟡"
 
+# --- HÀM XỬ LÝ TRẠNG THÁI MỚI ---
+
+def load_sent_links():
+    """Đọc file lưu trữ và trả về set chứa các link đã gửi (lấy 50 link gần nhất)."""
+    if os.path.exists(SENT_LINKS_FILE):
+        with open(SENT_LINKS_FILE, 'r') as f:
+            # Giữ lại 50 link cuối cùng để tránh file quá lớn
+            return set(f.read().splitlines()[-50:])
+    return set()
+
+def save_sent_links(new_links):
+    """Ghi thêm các link mới vào file lưu trữ và giới hạn 100 link."""
+    
+    # 1. Lấy tất cả các link cũ
+    current_links = []
+    if os.path.exists(SENT_LINKS_FILE):
+        with open(SENT_LINKS_FILE, 'r') as f:
+            current_links = f.read().splitlines()
+    
+    # 2. Thêm các link mới vào cuối
+    updated_links = current_links + list(new_links)
+
+    # 3. Chỉ giữ lại 100 link gần nhất (giới hạn kích thước file)
+    final_links = updated_links[-100:]
+
+    # 4. Ghi file
+    with open(SENT_LINKS_FILE, 'w') as f:
+        f.write('\n'.join(final_links))
+
+
+# --- HÀM LẤY TIN ĐÃ SỬA (Lọc tin cũ từ trạng thái) ---
+
 def get_news():
     try:
+        # Lấy danh sách link đã gửi từ lần chạy trước
+        previously_sent_links = load_sent_links() 
+        
         news_list = []
-        # TẠO MỘT SET ĐỂ LƯU CÁC LINK ĐÃ THẤY
+        # TẠO MỘT SET ĐỂ LƯU CÁC LINK ĐÃ THẤY (Lọc tin trùng trong lần chạy này)
         seen_links = set()
         
-        # Bắt đầu vòng lặp qua danh sách RSS_SOURCES
         for url in RSS_SOURCES:
             feed = feedparser.parse(url)
             # Lấy 5 tin mới nhất từ MỖI nguồn
             for entry in feed.entries[:5]:
                 link = entry.link
                 
-                # 1. KIỂM TRA TRÙNG LẶP
-                if link not in seen_links:
+                # BƯỚC LỌC KÉP: 
+                # 1. Lọc tin trùng trong lần chạy hiện tại
+                # 2. LỌC TIN ĐÃ GỬI TỪ LẦN TRƯỚC (chống lặp giữa các lần chạy)
+                if link not in seen_links and link not in previously_sent_links:
                     seen_links.add(link)
-                    
-                    # 2. BỔ SUNG TRƯỜNG DATE
                     date_info = entry.get('published_parsed') or entry.get('updated_parsed')
                     
                     news_list.append({
@@ -90,21 +121,18 @@ def get_news():
                         "date": date_info 
                     })
         
-        # 3. SẮP XẾP: Sắp xếp danh sách tin theo thời gian/ngày đăng (mới nhất lên đầu)
+        # Sắp xếp theo ngày mới nhất
         news_list.sort(key=lambda x: x.get('date', 0), reverse=True)
         
-        # 4. TRẢ VỀ TOÀN BỘ TIN TỨC: Đã bỏ giới hạn [:10]
-        return news_list 
+        # Trả về tất cả tin mới, chưa từng được gửi
+        return news_list
         
     except Exception as e:
         print(f"Lỗi lấy tin từ nhiều nguồn: {e}") 
         return []
-            
-        
-    except Exception as e:
-        # Thay thế print(f"Lỗi lấy tin: {e}") cũ bằng thông báo mới
-        print(f"Lỗi lấy tin từ nhiều nguồn: {e}") 
-        return []
+
+
+# --- HÀM GỬI TIN (Giữ nguyên) ---
 
 def send_telegram(news_items, time_str):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
@@ -114,13 +142,11 @@ def send_telegram(news_items, time_str):
     
     for item in news_items:
         row = f"{item['icon']} {item['title']} - <a href='{item['link']}'>chi tiết</a>\n\n"
-        # Trừa chỗ trống để chèn footer (khoảng 50 ký tự)
         if len(message) + len(row) + len(FOOTER_TEXT) < 4090:
             message += row
         else:
             break
     
-    # --- THÊM CHỮ KÝ VÀO CUỐI ---
     message += FOOTER_TEXT
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
@@ -145,7 +171,6 @@ def send_discord(news_items, time_str):
         else:
             break
             
-    # --- THÊM CHỮ KÝ VÀO CUỐI ---
     description += FOOTER_TEXT
 
     payload = {
@@ -161,6 +186,9 @@ def send_discord(news_items, time_str):
     requests.post(DISCORD_WEBHOOK, json=payload)
     print("Đã gửi Discord")
 
+
+# --- HÀM CHÍNH ĐÃ SỬA (Lưu trạng thái mới) ---
+
 if __name__ == "__main__":
     vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
     now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
@@ -169,7 +197,14 @@ if __name__ == "__main__":
     news_data = get_news()
     
     if news_data:
+        # Lấy danh sách link của các tin sẽ gửi (chưa gửi bao giờ)
+        links_to_save = [item['link'] for item in news_data]
+
         send_telegram(news_data, now_str)
         send_discord(news_data, now_str)
+        
+        # LƯU TRẠNG THÁI: Ghi các link vừa gửi vào file để lần sau không gửi lại
+        save_sent_links(links_to_save) 
+        
     else:
         print("Không có tin tức mới")
