@@ -21,9 +21,24 @@ FOOTER_TEXT = """
 # Hàm xác định màu icon
 def get_icon(title):
     title_lower = title.lower()
-    if any(w in title_lower for w in ['tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục']):
+
+    # Keywords Tích cực (Bao gồm Thị trường, Chính sách, Kinh tế Vĩ mô)
+    positive_keywords = [
+        'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 
+        'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 
+        'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức'
+    ]
+
+    # Keywords Tiêu cực (Bao gồm Rủi ro, Thanh tra, Giảm điểm/lỗ)
+    negative_keywords = [
+        'giảm', 'lỗ', 'thủng', 'đáy', 'bán tháo', 'lao dốc', 
+        'siết chặt', 'kiểm tra', 'thanh tra', 'điều tra', 'phạt', 
+        'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng'
+    ]
+
+    if any(w in title_lower for w in positive_keywords):
         return "🟢"
-    elif any(w in title_lower for w in ['giảm', 'lỗ', 'thủng', 'đáy', 'bán tháo', 'lao dốc']):
+    elif any(w in title_lower for w in negative_keywords):
         return "🔴"
     else:
         return "🟡"
