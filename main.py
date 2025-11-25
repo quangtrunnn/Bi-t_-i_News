@@ -13,6 +13,11 @@ RSS_SOURCES = [
     "https://cafef.vn/thi-truong-chung-khoan.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
     "https://nguoiquansat.vn/thi-truong.rss",
+
+    # --- 3 Nguồn mới bổ sung ---
+    "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
+    "https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
+    "https://baodautu.vn/rss/chung-khoan-18.rss",                # Báo Đầu tư
     
     # --- 12 Nguồn VnEconomy mới ---
     "https://vneconomy.vn/tin-moi.rss",
@@ -40,19 +45,30 @@ FOOTER_TEXT = """
 🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
 """
 
-# Hàm xác định màu icon (Giữ nguyên logic)
+# Hàm xác định màu icon
 def get_icon(title):
     title_lower = title.lower()
+
+    # Keywords Tích cực (Bổ sung thêm từ khóa về mục tiêu, dòng tiền, hiệu quả)
     positive_keywords = [
         'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 
         'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 'đóng góp',
-        'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức','động lực', 'mạnh mẽ'
+        'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức', 'động lực', 'mạnh mẽ',
+        # --- BỔ SUNG MỚI ---
+        'mục tiêu', 'dòng tiền', 'kích thích', 'thành công', 'hiệu quả', 'tiềm năng', 'chủ động', 
+        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng'
     ]
+
+    # Keywords Tiêu cực (Bổ sung từ khóa về rủi ro, áp lực, trì trệ)
     negative_keywords = [
         'giảm', 'lỗ', 'thủng', 'đáy', 'bán tháo', 'lao dốc', 
         'siết chặt', 'kiểm tra', 'thanh tra', 'điều tra', 'phạt', 'khẩn cấp',
-        'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng'
+        'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng',
+        # --- BỔ SUNG MỚI ---
+        'bất ổn', 'nguy cơ', 'thiếu hụt', 'rào cản', 'áp lực', 'đình trệ', 'tê liệt', 
+        'cảnh báo', 'thua lỗ', 'tụt dốc', 'phải trả', 'đổ vỡ'
     ]
+
     if any(w in title_lower for w in positive_keywords):
         return "🟢"
     elif any(w in title_lower for w in negative_keywords):
