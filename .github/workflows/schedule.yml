@@ -2,10 +2,9 @@ name: Stock News Bot
 
 on:
   schedule:
-    # 1. THAY ĐỔI: Chuyển sang lịch chạy cứ 30 phút một lần
+    # Lịch chạy 30 phút/lần
     - cron: '*/30 * * * *'
 
-  # Dòng này để mày có thể bấm nút chạy thử thủ công
   workflow_dispatch:
 
 jobs:
@@ -13,32 +12,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Bước 1 MỚI: Thêm Cache để đọc/ghi file sent_links.txt
-      - name: Cache Sent Links
+      # 1. TẢI CACHE: Đọc file sent_links.txt cũ
+      - name: Restore Sent Links Cache
+        id: cache-restore # Gán ID để tham chiếu sau này
         uses: actions/cache@v3
         with:
-          path: sent_links.txt  # Tên file trạng thái
-          # Key này đảm bảo cache được tải về và lưu lại
-          key: ${{ runner.os }}-sent-links
-          restore-keys: |
-            ${{ runner.os }}-sent-links
-      
+          path: sent_links.txt
+          key: ${{ runner.os }}-sent-links-{%- set day = 'now' | date('Ymd') %}{{ day }} # Thêm ngày vào key để tránh cache bị quá cũ
+
+      # 2. Checkout code (Giữ nguyên)
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 3. Setup Python (Giữ nguyên)
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # Bạn đang dùng requirements.txt, nên ta sẽ dùng lệnh này
+      # 4. Cài đặt dependencies (Giữ nguyên)
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
+      # 5. CHẠY BOT (Lúc này file sent_links.txt đã được cập nhật)
       - name: Run Bot
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python main.py
+        
+      # 6. LƯU CACHE (BƯỚC MỚI VÀ QUAN TRỌNG NHẤT!)
+      - name: Save Sent Links Cache
+        uses: actions/cache@v3
+        # Chỉ lưu nếu có thay đổi (tức là key không khớp với key đã restore)
+        if: always() # Luôn chạy bước này
+        with:
+          path: sent_links.txt
+          key: ${{ runner.os }}-sent-links-{%- set day = 'now' | date('Ymd') %}{{ day }}
