@@ -8,7 +8,8 @@ import pytz
 RSS_SOURCES = [
     "https://cafef.vn/thi-truong-chung-khoan.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
-    "https://nguoiquansat.vn/feed/thitruong" 
+    "https://nguoiquansat.vn/feed/taichinh",               # Link thử nghiệm cho Người Quan Sát (chuyên mục tài chính)
+    "https://tapchikinhtetaichinh.vn/rss/tin-moi.rss"      # 👈 THÊM Tạp Chí Kinh Tế Tài Chính
 ]
 DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
