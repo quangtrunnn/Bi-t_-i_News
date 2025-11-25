@@ -9,7 +9,7 @@ RSS_SOURCES = [
     # --- 4 Nguồn cũ ---
     "https://cafef.vn/thi-truong-chung-khoan.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
-    "https://nguoiquansat.vn/feed/taichinh",
+    "https://nguoiquansat.vn/thi-truong.rss",
     "https://tapchikinhtetaichinh.vn/rss/tin-moi.rss",
     
     # --- 12 Nguồn VnEconomy mới ---
