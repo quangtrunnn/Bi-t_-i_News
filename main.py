@@ -18,7 +18,10 @@ RSS_SOURCES = [
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
     "https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
     "https://baodautu.vn/rss/chung-khoan-18.rss",                # Báo Đầu tư
-    
+    # --- 3 Nguồn MỚI BỔ SUNG LẦN NÀY ---
+    "https://tapchitaichinh.vn/rss/chung-khoan.rss",             # Tạp chí Tài chính
+    "https://congthuong.vn/rss/tai-chinh.rss",                   # Báo Công Thương
+    "https://diendandoanhnghiep.vn/rss/tin-tuc-chung-khoan-27.rss", # Diễn đàn Doanh nghiệp
     # --- 12 Nguồn VnEconomy mới ---
     "https://vneconomy.vn/tin-moi.rss",
     "https://vneconomy.vn/tieu-diem.rss",
