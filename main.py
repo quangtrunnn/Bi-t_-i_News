@@ -5,7 +5,11 @@ from datetime import datetime
 import pytz
 
 # --- CẤU HÌNH ---
-RSS_URL = "https://cafef.vn/thi-truong-chung-khoan.rss" 
+RSS_SOURCES = [
+    "https://cafef.vn/thi-truong-chung-khoan.rss",
+    "https://vietstock.vn/rss/chung-khoan.rss",
+    "https://nguoiquansat.vn/feed/thitruong" 
+]
 DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
