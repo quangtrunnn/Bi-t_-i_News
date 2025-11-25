@@ -2,12 +2,8 @@ name: Stock News Bot
 
 on:
   schedule:
-    # Chạy vào phút 00: (07:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 19:00, 21:00 VN)
-    # Tương đương: 0, 4, 5, 6, 7, 8, 9, 12, 14 giờ UTC
-    - cron: '0 0,4,5,6,7,8,9,12,14 * * *' 
-    # Chạy vào phút 30: (08:30, 09:30 VN)
-    # Tương đương: 1, 2 giờ UTC
-    - cron: '30 1,2 * * *'
+    # 1. THAY ĐỔI: Chuyển sang lịch chạy cứ 30 phút một lần
+    - cron: '*/30 * * * *'
 
   # Dòng này để mày có thể bấm nút chạy thử thủ công
   workflow_dispatch:
@@ -17,21 +13,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Bước 1 MỚI: Thêm Cache để đọc/ghi file sent_links.txt
+      - name: Cache Sent Links
+        uses: actions/cache@v3
+        with:
+          path: sent_links.txt  # Tên file trạng thái
+          # Key này đảm bảo cache được tải về và lưu lại
+          key: ${{ runner.os }}-sent-links
+          restore-keys: |
+            ${{ runner.os }}-sent-links
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      # Bạn đang dùng requirements.txt, nên ta sẽ dùng lệnh này
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Run Bot
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python main.py
+      - name: Run Bot
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py
