@@ -66,21 +66,40 @@ def get_icon(title):
 def get_news():
     try:
         news_list = []
+        # TẠO MỘT SET ĐỂ LƯU CÁC LINK ĐÃ THẤY
+        seen_links = set()
+        
         # Bắt đầu vòng lặp qua danh sách RSS_SOURCES
         for url in RSS_SOURCES:
             feed = feedparser.parse(url)
             # Lấy 5 tin mới nhất từ MỖI nguồn
             for entry in feed.entries[:5]:
-                # Tránh lấy tin trùng lặp (nếu có)
-                if entry.link not in [n['link'] for n in news_list]:
+                link = entry.link
+                
+                # 1. KIỂM TRA TRÙNG LẶP
+                if link not in seen_links:
+                    seen_links.add(link)
+                    
+                    # 2. BỔ SUNG TRƯỜNG DATE
+                    date_info = entry.get('published_parsed') or entry.get('updated_parsed')
+                    
                     news_list.append({
                         "title": entry.title,
-                        "link": entry.link,
-                        "icon": get_icon(entry.title)
+                        "link": link,
+                        "icon": get_icon(entry.title),
+                        "date": date_info 
                     })
         
-        # Chỉ lấy tổng cộng 10 tin đầu tiên để tin nhắn không quá dài
-        return news_list[:10] 
+        # 3. SẮP XẾP: Sắp xếp danh sách tin theo thời gian/ngày đăng (mới nhất lên đầu)
+        news_list.sort(key=lambda x: x.get('date', 0), reverse=True)
+        
+        # 4. TRẢ VỀ TOÀN BỘ TIN TỨC: Đã bỏ giới hạn [:10]
+        return news_list 
+        
+    except Exception as e:
+        print(f"Lỗi lấy tin từ nhiều nguồn: {e}") 
+        return []
+            
         
     except Exception as e:
         # Thay thế print(f"Lỗi lấy tin: {e}") cũ bằng thông báo mới
