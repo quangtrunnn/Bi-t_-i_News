@@ -49,17 +49,26 @@ def get_icon(title):
 
 def get_news():
     try:
-        feed = feedparser.parse(RSS_URL)
         news_list = []
-        for entry in feed.entries[:10]:
-            news_list.append({
-                "title": entry.title,
-                "link": entry.link,
-                "icon": get_icon(entry.title)
-            })
-        return news_list
+        # Bắt đầu vòng lặp qua danh sách RSS_SOURCES
+        for url in RSS_SOURCES:
+            feed = feedparser.parse(url)
+            # Lấy 5 tin mới nhất từ MỖI nguồn
+            for entry in feed.entries[:5]:
+                # Tránh lấy tin trùng lặp (nếu có)
+                if entry.link not in [n['link'] for n in news_list]:
+                    news_list.append({
+                        "title": entry.title,
+                        "link": entry.link,
+                        "icon": get_icon(entry.title)
+                    })
+        
+        # Chỉ lấy tổng cộng 10 tin đầu tiên để tin nhắn không quá dài
+        return news_list[:10] 
+        
     except Exception as e:
-        print(f"Lỗi lấy tin: {e}")
+        # Thay thế print(f"Lỗi lấy tin: {e}") cũ bằng thông báo mới
+        print(f"Lỗi lấy tin từ nhiều nguồn: {e}") 
         return []
 
 def send_telegram(news_items, time_str):
