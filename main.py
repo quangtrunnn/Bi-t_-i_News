@@ -11,8 +11,12 @@ TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
 # --- CHỮ KÝ MUỐN THÊM ---
-FOOTER_TEXT = "\n\n#bietdoi\n===============================\n📊 Phân tích cảm xúc bài viết từ Hệ thống AI của Biệt Đội Tài Chén 
-\n🟢 Tích cực     🟡 Trung lập     🔴 Tiêu cực"
+FOOTER_TEXT = """
+#bietdoi
+===============================
+📊 Phân tích cảm xúc bài viết từ Hệ thống AI của Biệt Đội Tài Chén
+🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
+"""
 
 # Hàm xác định màu icon
 def get_icon(title):
