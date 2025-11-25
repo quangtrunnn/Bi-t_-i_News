@@ -6,10 +6,25 @@ import pytz
 
 # --- CẤU HÌNH ---
 RSS_SOURCES = [
+    # --- 4 Nguồn cũ ---
     "https://cafef.vn/thi-truong-chung-khoan.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
-    "https://nguoiquansat.vn/feed/taichinh",               # Link thử nghiệm cho Người Quan Sát (chuyên mục tài chính)
-    "https://tapchikinhtetaichinh.vn/rss/tin-moi.rss"      # 👈. THÊM Tạp Chí Kinh Tế Tài Chính
+    "https://nguoiquansat.vn/feed/taichinh",
+    "https://tapchikinhtetaichinh.vn/rss/tin-moi.rss",
+    
+    # --- 12 Nguồn VnEconomy mới ---
+    "https://vneconomy.vn/tin-moi.rss",
+    "https://vneconomy.vn/tieu-diem.rss",
+    "https://vneconomy.vn/chung-khoan.rss",
+    "https://vneconomy.vn/thi-truong.rss",
+    "https://vneconomy.vn/nhip-cau-doanh-nghiep.rss",
+    "https://vneconomy.vn/tieu-dung.rss",
+    "https://vneconomy.vn/kinh-te-xanh.rss",
+    "https://vneconomy.vn/tai-chinh.rss",
+    "https://vneconomy.vn/kinh-te-so.rss",
+    "https://vneconomy.vn/dia-oc.rss",
+    "https://vneconomy.vn/kinh-te-the-gioi.rss",
+    "https://vneconomy.vn/dau-tu.rss"
 ]
 DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
@@ -120,7 +135,7 @@ def send_discord(news_items, time_str):
             "description": description,
             "color": 16776960,
             "footer": {
-                "text": "Nguồn: CafeF"
+                "text": "Nguồn: Tổng hợp bởi Biệt_Đội_News"
             }
         }]
     }
