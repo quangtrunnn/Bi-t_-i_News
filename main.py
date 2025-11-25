@@ -45,14 +45,14 @@ def get_icon(title):
     # Keywords Tích cực (Bao gồm Thị trường, Chính sách, Kinh tế Vĩ mô)
     positive_keywords = [
         'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 
-        'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 
-        'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức'
+        'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 'đóng góp',
+        'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức','động lực', 'mạnh mẽ'
     ]
 
     # Keywords Tiêu cực (Bao gồm Rủi ro, Thanh tra, Giảm điểm/lỗ)
     negative_keywords = [
         'giảm', 'lỗ', 'thủng', 'đáy', 'bán tháo', 'lao dốc', 
-        'siết chặt', 'kiểm tra', 'thanh tra', 'điều tra', 'phạt', 
+        'siết chặt', 'kiểm tra', 'thanh tra', 'điều tra', 'phạt', 'khẩn cấp',
         'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng'
     ]
 
