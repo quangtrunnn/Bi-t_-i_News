@@ -8,12 +8,7 @@ import requests
 import feedparser
 import datetime
 
-# --- KHAI BÁO USER-AGENT GIẢ MẠO ĐỂ VƯỢT QUA LỖI 403 ---
-HEADERS = {
-    # Giả mạo thành Chrome trên Windows
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' 
-}
+
 from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
@@ -36,30 +31,6 @@ RSS_SOURCES = [
     "https://cafef.vn/thi-truong.rss",
     "https://cafef.vn/tin-tuc-du-an.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
-
-    # --- 15 NGUỒN MỚI TỪ NGƯỜI QUAN SÁT (BỎ ĐUÔI .RSS) ---
-    # 1. Chứng Khoán (4 nguồn)
-    "https://nguoiquansat.vn/rss/trang-chu.rss",
-    "https://nguoiquansat.vn/rss/chung-khoan.rss", 
-    "https://nguoiquansat.vn/rss/chung-khoan/chuyen-dong-thi-truong.rss", 
-    "https://nguoiquansat.vn/rss/chung-khoan/doanh-nghiep-az", 
-    "https://nguoiquansat.vn/rss/chung-khoan/cau-chuyen-dau-tu",
-    # 2. Bất Động Sản (3 nguồn)
-    "https://nguoiquansat.vn/rss/bat-dong-san", 
-    "https://nguoiquansat.vn/rss/bat-dong-san/thi-truong-doanh-nghiep", 
-    "https://nguoiquansat.vn/rss/bat-dong-san/ha-tang-chinh-sach",
-    # 3. Tài Chính & Ngân Hàng (1 nguồn)
-    "https://nguoiquansat.vn/rss/tai-chinh-ngan-hang",
-    # 4. Doanh Nghiệp (3 nguồn)
-    "https://nguoiquansat.vn/rss/doanh-nghiep", 
-    "https://nguoiquansat.vn/rss/doanh-nghiep/chuyen-dong-doanh-nghiep", 
-    "https://nguoiquansat.vn/rss/doanh-nghiep/co-hoi-dau-tu",
-    # 5. Khác (4 nguồn)
-    "https://nguoiquansat.vn/rss/the-gioi/tai-chinh-quoc-te", 
-    "https://nguoiquansat.vn/rss/thi-truong", 
-    "https://nguoiquansat.vn/rss/thi-truong/hang-hoa-tieu-dung", 
-    "https://nguoiquansat.vn/rss/vi-mo",
-    
 
     # --- 3 Nguồn mới bổ sung ---
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
@@ -223,32 +194,6 @@ def save_sent_links(new_links):
     with open(SENT_LINKS_FILE, 'w') as f:
         f.write('\n'.join(final_links))
 
-def fetch_rss_with_spoofing(url):
-    # Chỉ áp dụng Spoofing cho các nguồn của Người Quan Sát (NQS)
-    if "nguoiquansat.vn" in url:
-        print(f"-> Áp dụng Spoofing cho nguồn NQS: {url}")
-        try:
-            # Gửi yêu cầu với User-Agent giả mạo, đặt Timeout 20s
-            response = requests.get(url, headers=HEADERS, timeout=20) 
-            
-            # Kiểm tra Status Code
-            if response.status_code == 200:
-                # Trả về kết quả phân tích cú pháp (parsing) của nội dung thô
-                return feedparser.parse(response.content)
-            else:
-                # Ghi lại lỗi nếu Status Code không phải 200 (ví dụ: 403)
-                print(f"   LỖI HTTP: NQS trả về Status Code {response.status_code}")
-                return None
-        except requests.exceptions.RequestException as e:
-            # Ghi lại lỗi kết nối hoặc Timeout
-            print(f"   LỖI KẾT NỐI/TIMEOUT khi fetch {url}: {e}")
-            return None
-    
-    # Đối với tất cả các nguồn khác (Cafef, Vietstock, VnEconomy...), dùng cách cũ
-    else:
-        return feedparser.parse(url)
-
-
 # --- HÀM LẤY TIN (ĐÃ THÊM LỌC THEO THỜI GIAN) ---
 
 def get_news():
@@ -261,8 +206,7 @@ def get_news():
         age_limit = datetime.now(pytz.utc) - timedelta(hours=MAX_AGE_HOURS)
         
         for url in RSS_SOURCES:
-            #feed = feedparser.parse(url)
-            feed = fetch_rss_with_spoofing(url) # <-- Dùng hàm mới
+            feed = feedparser.parse(url)
             
             for entry in feed.entries[:5]:
                 link = entry.link
