@@ -4,6 +4,7 @@ import feedparser
 from datetime import datetime
 import pytz
 
+from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
 
@@ -112,7 +113,7 @@ def save_sent_links(new_links):
         f.write('\n'.join(final_links))
 
 
-from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
+
 
 # --- HÀM LẤY TIN (ĐÃ THÊM LỌC THEO THỜI GIAN) ---
 
