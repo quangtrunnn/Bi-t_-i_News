@@ -26,7 +26,15 @@ RSS_SOURCES = [
     "https://cafef.vn/thi-truong.rss",
     "https://cafef.vn/tin-tuc-du-an.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
-    "https://nguoiquansat.vn/thi-truong.rss",
+
+    # --- TOÀN BỘ NGUỒN NGƯỜI QUAN SÁT ---
+    "https://nguoiquansat.vn/rss/chung-khoan.rss",
+    "https://nguoiquansat.vn/rss/bat-dong-san.rss",
+    "https://nguoiquansat.vn/rss/tai-chinh-ngan-hang.rss",
+    "https://nguoiquansat.vn/rss/doanh-nghiep.rss",
+    "https://nguoiquansat.vn/rss/the-gioi.rss",
+    "https://nguoiquansat.vn/rss/thi-truong.rss",
+    "https://nguoiquansat.vn/rss/vi-mo.rss",
 
     # --- 3 Nguồn mới bổ sung ---
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
