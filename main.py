@@ -29,29 +29,25 @@ RSS_SOURCES = [
 
     # --- 15 NGUỒN MỚI TỪ NGƯỜI QUAN SÁT (BỎ ĐUÔI .RSS) ---
     # 1. Chứng Khoán (4 nguồn)
-    "https://nguoiquansat.vn/rss/chung-khoan.rss", 
-    "https://nguoiquansat.vn/rss/chung-khoan/chuyen-dong-thi-truong.rss", 
-    "https://nguoiquansat.vn/rss/chung-khoan/doanh-nghiep-az.rss", 
-    "https://nguoiquansat.vn/rss/chung-khoan/cau-chuyen-dau-tu.rss",
-
+    "https://nguoiquansat.vn/rss/chung-khoan", 
+    "https://nguoiquansat.vn/rss/chung-khoan/chuyen-dong-thi-truong", 
+    "https://nguoiquansat.vn/rss/chung-khoan/doanh-nghiep-az", 
+    "https://nguoiquansat.vn/rss/chung-khoan/cau-chuyen-dau-tu",
     # 2. Bất Động Sản (3 nguồn)
-    "https://nguoiquansat.vn/rss/bat-dong-san.rss", 
-    "https://nguoiquansat.vn/rss/bat-dong-san/thi-truong-doanh-nghiep.rss", 
-    "https://nguoiquansat.vn/rss/bat-dong-san/ha-tang-chinh-sach.rss",
-
+    "https://nguoiquansat.vn/rss/bat-dong-san", 
+    "https://nguoiquansat.vn/rss/bat-dong-san/thi-truong-doanh-nghiep", 
+    "https://nguoiquansat.vn/rss/bat-dong-san/ha-tang-chinh-sach",
     # 3. Tài Chính & Ngân Hàng (1 nguồn)
-    "https://nguoiquansat.vn/rss/tai-chinh-ngan-hang.rss",
-
+    "https://nguoiquansat.vn/rss/tai-chinh-ngan-hang",
     # 4. Doanh Nghiệp (3 nguồn)
-    "https://nguoiquansat.vn/rss/doanh-nghiep.rss", 
-    "https://nguoiquansat.vn/rss/doanh-nghiep/chuyen-dong-doanh-nghiep.rss", 
-    "https://nguoiquansat.vn/rss/doanh-nghiep/co-hoi-dau-tu.rss",
-
+    "https://nguoiquansat.vn/rss/doanh-nghiep", 
+    "https://nguoiquansat.vn/rss/doanh-nghiep/chuyen-dong-doanh-nghiep", 
+    "https://nguoiquansat.vn/rss/doanh-nghiep/co-hoi-dau-tu",
     # 5. Khác (4 nguồn)
-    "https://nguoiquansat.vn/rss/the-gioi/tai-chinh-quoc-te.rss", 
-    "https://nguoiquansat.vn/rss/thi-truong.rss", 
-    "https://nguoiquansat.vn/rss/thi-truong/hang-hoa-tieu-dung.rss", 
-    "https://nguoiquansat.vn/rss/vi-mo.rss",
+    "https://nguoiquansat.vn/rss/the-gioi/tai-chinh-quoc-te", 
+    "https://nguoiquansat.vn/rss/thi-truong", 
+    "https://nguoiquansat.vn/rss/thi-truong/hang-hoa-tieu-dung", 
+    "https://nguoiquansat.vn/rss/vi-mo",
     
 
     # --- 3 Nguồn mới bổ sung ---
