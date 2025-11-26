@@ -50,8 +50,14 @@ RSS_SOURCES = [
     "https://vneconomy.vn/kinh-te-the-gioi.rss",
     "https://vneconomy.vn/dau-tu.rss"
 
+    # --- NGUỒN MỚI TỪ NHỊP SỐNG KINH DOANH ---
+    "https://nhipsongkinhdoanh.vn/rss/vang-bac-kim-loai-quy-14711.rss",
+    "https://nhipsongkinhdoanh.vn/rss/tai-san-so-14191.rss",
+    "https://nhipsongkinhdoanh.vn/rss/tai-chinh-6.rss", # Chỉ giữ lại 1 lần
+    "https://nhipsongkinhdoanh.vn/rss/doanh-nghiep-7182.rss",
+    "https://nhipsongkinhdoanh.vn/rss/kinh-doanh-11.rss",
+    
     # --- 36 NGUỒN MỚI TỪ VIETSTOCK (BỔ SUNG) ---
-
     # 1. Chứng Khoán (9 nguồn)
     "https://vietstock.vn/739/chung-khoan/giao-dich-noi-bo.rss",
     "https://vietstock.vn/830/chung-khoan/co-phieu.rss",
