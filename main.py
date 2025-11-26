@@ -169,12 +169,12 @@ def get_icon(title):
 
     # Keywords Tích cực (Bổ sung thêm từ khóa về mục tiêu, dòng tiền, hiệu quả)
     positive_keywords = [
-        'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 
-        'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 'đóng góp',
+        'tăng', 'lãi', 'vượt', 'đỉnh', 'khởi sắc', 'hồi phục', 'chính thức', 'tin vui',
+        'ổn định', 'mở cửa', 'thúc đẩy', 'hỗ trợ', 'tăng trưởng', 'đóng góp', 'phát triển',
         'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức', 'động lực', 'mạnh mẽ',
         # --- BỔ SUNG MỚI ---
         'mục tiêu', 'dòng tiền', 'kích thích', 'thành công', 'hiệu quả', 'tiềm năng', 'chủ động', 
-        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng'
+        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng', 'bùng nổ'
     ]
 
     # Keywords Tiêu cực (Bổ sung từ khóa về rủi ro, áp lực, trì trệ)
