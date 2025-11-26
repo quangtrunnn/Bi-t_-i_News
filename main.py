@@ -40,8 +40,8 @@ RSS_SOURCES = [
     # --- 15 NGUỒN MỚI TỪ NGƯỜI QUAN SÁT (BỎ ĐUÔI .RSS) ---
     # 1. Chứng Khoán (4 nguồn)
     "https://nguoiquansat.vn/rss/trang-chu.rss",
-    "https://nguoiquansat.vn/rss/chung-khoan", 
-    "https://nguoiquansat.vn/rss/chung-khoan/chuyen-dong-thi-truong", 
+    "https://nguoiquansat.vn/rss/chung-khoan.rss", 
+    "https://nguoiquansat.vn/rss/chung-khoan/chuyen-dong-thi-truong.rss", 
     "https://nguoiquansat.vn/rss/chung-khoan/doanh-nghiep-az", 
     "https://nguoiquansat.vn/rss/chung-khoan/cau-chuyen-dau-tu",
     # 2. Bất Động Sản (3 nguồn)
