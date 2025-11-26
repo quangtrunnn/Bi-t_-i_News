@@ -109,7 +109,12 @@ RSS_SOURCES = [
     # 9. Nhận Định/Phân Tích (3 nguồn)
     "https://vietstock.vn/1636/nhan-dinh-phan-tich/nhan-dinh-thi-truong.rss",
     "https://vietstock.vn/582/nhan-dinh-phan-tich/phan-tich-co-ban.rss",
-    "https://vietstock.vn/585/nhan-dinh-phan-tich/phan-tich-ky-thuat.rss"
+    "https://vietstock.vn/585/nhan-dinh-phan-tich/phan-tich-ky-thuat.rss",
+
+    # --- NGUỒN MỚI TỪ DÂN TRÍ ---
+    "https://dantri.com.vn/rss/gia-vang.rss",
+    "https://dantri.com.vn/rss/tam-diem.rss",
+    "https://dantri.com.vn/rss/kinh-doanh.rss"
 ]
 DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
