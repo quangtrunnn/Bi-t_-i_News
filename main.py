@@ -14,7 +14,17 @@ SENT_LINKS_FILE = 'sent_links.txt'
 MAX_AGE_HOURS = 12
 RSS_SOURCES = [
     # --- 4 Nguồn cũ ---
-    "https://cafef.vn/thi-truong-chung-khoan.rss",
+    # --- NGUỒN CAFEF MỚI VÀ HIỆN CÓ ---
+    "https://cafef.vn/thi-truong-chung-khoan.rss", # Giữ lại nguồn chính
+    "https://cafef.vn/bat-dong-san.rss",
+    "https://cafef.vn/doanh-nghiep.rss",
+    "https://cafef.vn/tai-chinh-ngan-hang.rss",
+    "https://cafef.vn/tai-chinh-quoc-te.rss",
+    "https://cafef.vn/smart-money.rss",
+    "https://cafef.vn/vi-mo-dau-tu.rss",
+    "https://cafef.vn/kinh-te-so.rss",
+    "https://cafef.vn/thi-truong.rss",
+    "https://cafef.vn/tin-tuc-du-an.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
     "https://nguoiquansat.vn/thi-truong.rss",
 
