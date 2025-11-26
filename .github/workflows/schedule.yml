@@ -2,7 +2,7 @@ name: Stock News Bot
 
 on:
   schedule:
-    # Lịch chạy cứ 30 phút một lần, CHỈ từ 6h sáng đến 10h tối (22:00)
+    # Lịch chạy cứ 30 phút một lần, CHỈ từ 6h sáng (06:00) đến 10h tối (22:00)
     - cron: '0,30 6-22 * * *'
 
   workflow_dispatch:
