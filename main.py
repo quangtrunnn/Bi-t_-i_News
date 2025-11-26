@@ -36,23 +36,6 @@ RSS_SOURCES = [
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
     "https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
     
-    # --- 12 NGUỒN MỚI TỪ BÁO ĐẦU TƯ ---
-    "https://baodautu.vn/thoi-su.rss",
-    "https://baodautu.vn/dau-tu.rss",
-    "https://baodautu.vn/doanh-nghiep.rss",
-    "https://baodautu.vn/ngan-hang--bao-hiem.rss",
-    "https://baodautu.vn/tai-chinh-chung-khoan.rss",
-    "https://baodautu.vn/bat-dong-san.rss",
-    "https://baodautu.vn/tieu-dung.rss",
-    "https://baodautu.vn/dau-tu-va-cuoc-song.rss",
-    "https://baodautu.vn/dau-tu-phat-trien-ben-vung.rss",
-    "https://baodautu.vn/kinh-te-so.rss",
-    "https://baodautu.vn/quoc-te.rss",
-    "https://baodautu.vn/diem-tin-noi-bat.rss",
-    # --- 3 Nguồn MỚI BỔ SUNG LẦN NÀY ---
-    "https://tapchitaichinh.vn/rss/chung-khoan.rss",             # Tạp chí Tài chính
-    "https://congthuong.vn/rss/tai-chinh.rss",                   # Báo Công Thương
-    "https://diendandoanhnghiep.vn/rss/tin-tuc-chung-khoan-27.rss", # Diễn đàn Doanh nghiệp
     # --- 12 Nguồn VnEconomy mới ---
     "https://vneconomy.vn/tin-moi.rss",
     "https://vneconomy.vn/tieu-diem.rss",
