@@ -4,6 +4,16 @@ import feedparser
 from datetime import datetime
 import pytz
 
+import requests
+import feedparser
+import datetime
+
+# --- KHAI BÁO USER-AGENT GIẢ MẠO ĐỂ VƯỢT QUA LỖI 403 ---
+HEADERS = {
+    # Giả mạo thành Chrome trên Windows
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' 
+}
 from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
@@ -213,7 +223,30 @@ def save_sent_links(new_links):
     with open(SENT_LINKS_FILE, 'w') as f:
         f.write('\n'.join(final_links))
 
-
+def fetch_rss_with_spoofing(url):
+    # Chỉ áp dụng Spoofing cho các nguồn của Người Quan Sát (NQS)
+    if "nguoiquansat.vn" in url:
+        print(f"-> Áp dụng Spoofing cho nguồn NQS: {url}")
+        try:
+            # Gửi yêu cầu với User-Agent giả mạo, đặt Timeout 20s
+            response = requests.get(url, headers=HEADERS, timeout=20) 
+            
+            # Kiểm tra Status Code
+            if response.status_code == 200:
+                # Trả về kết quả phân tích cú pháp (parsing) của nội dung thô
+                return feedparser.parse(response.content)
+            else:
+                # Ghi lại lỗi nếu Status Code không phải 200 (ví dụ: 403)
+                print(f"   LỖI HTTP: NQS trả về Status Code {response.status_code}")
+                return None
+        except requests.exceptions.RequestException as e:
+            # Ghi lại lỗi kết nối hoặc Timeout
+            print(f"   LỖI KẾT NỐI/TIMEOUT khi fetch {url}: {e}")
+            return None
+    
+    # Đối với tất cả các nguồn khác (Cafef, Vietstock, VnEconomy...), dùng cách cũ
+    else:
+        return feedparser.parse(url)
 
 
 # --- HÀM LẤY TIN (ĐÃ THÊM LỌC THEO THỜI GIAN) ---
@@ -228,7 +261,9 @@ def get_news():
         age_limit = datetime.now(pytz.utc) - timedelta(hours=MAX_AGE_HOURS)
         
         for url in RSS_SOURCES:
-            feed = feedparser.parse(url)
+            #feed = feedparser.parse(url)
+            feed = fetch_rss_with_spoofing(url) # <-- Dùng hàm mới
+            
             for entry in feed.entries[:5]:
                 link = entry.link
                 date_info = entry.get('published_parsed') or entry.get('updated_parsed')
