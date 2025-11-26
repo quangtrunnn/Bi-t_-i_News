@@ -8,6 +8,9 @@ import pytz
 SENT_LINKS_FILE = 'sent_links.txt' 
 
 # --- CẤU HÌNH ---
+# Giới hạn độ tuổi tối đa của bài viết được phép gửi (tính theo giờ)
+# Nếu bài báo cũ hơn 12 tiếng, bot sẽ bỏ qua
+MAX_AGE_HOURS = 12
 RSS_SOURCES = [
     # --- 4 Nguồn cũ ---
     "https://cafef.vn/thi-truong-chung-khoan.rss",
@@ -109,29 +112,43 @@ def save_sent_links(new_links):
         f.write('\n'.join(final_links))
 
 
-# --- HÀM LẤY TIN ĐÃ SỬA (Lọc tin cũ từ trạng thái) ---
+from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
+
+# --- HÀM LẤY TIN (ĐÃ THÊM LỌC THEO THỜI GIAN) ---
 
 def get_news():
     try:
-        # Lấy danh sách link đã gửi từ lần chạy trước
         previously_sent_links = load_sent_links() 
-        
         news_list = []
-        # TẠO MỘT SET ĐỂ LƯU CÁC LINK ĐÃ THẤY (Lọc tin trùng trong lần chạy này)
         seen_links = set()
+        
+        # Thiết lập ngưỡng thời gian tối đa cho bài viết
+        age_limit = datetime.now(pytz.utc) - timedelta(hours=MAX_AGE_HOURS)
         
         for url in RSS_SOURCES:
             feed = feedparser.parse(url)
-            # Lấy 5 tin mới nhất từ MỖI nguồn
             for entry in feed.entries[:5]:
                 link = entry.link
+                date_info = entry.get('published_parsed') or entry.get('updated_parsed')
                 
-                # BƯỚC LỌC KÉP: 
-                # 1. Lọc tin trùng trong lần chạy hiện tại
-                # 2. LỌC TIN ĐÃ GỬI TỪ LẦN TRƯỚC (chống lặp giữa các lần chạy)
+                # BƯỚC LỌC 1: Lọc bài viết quá cũ (Age Filter)
+                if date_info:
+                    try:
+                        # Chuyển đổi thời gian bài viết sang UTC để so sánh
+                        article_dt_utc = datetime(*date_info[:6], tzinfo=pytz.utc)
+                        if article_dt_utc < age_limit:
+                            continue # Bỏ qua bài báo quá cũ
+                    except Exception as e:
+                        # Bỏ qua nếu không thể phân tích ngày tháng
+                        print(f"Không thể phân tích ngày đăng của link {link}: {e}")
+                        continue
+                else:
+                    # Bỏ qua nếu không có thông tin ngày đăng
+                    continue
+
+                # BƯỚC LỌC 2 & 3: Lọc link trùng trong lần chạy hiện tại và link đã gửi từ trước
                 if link not in seen_links and link not in previously_sent_links:
                     seen_links.add(link)
-                    date_info = entry.get('published_parsed') or entry.get('updated_parsed')
                     
                     news_list.append({
                         "title": entry.title,
@@ -140,15 +157,16 @@ def get_news():
                         "date": date_info 
                     })
         
-        # Sắp xếp theo ngày mới nhất
+        # Sắp xếp và trả về tất cả tin mới, chưa quá cũ
         news_list.sort(key=lambda x: x.get('date', 0), reverse=True)
-        
-        # Trả về tất cả tin mới, chưa từng được gửi
         return news_list
         
     except Exception as e:
         print(f"Lỗi lấy tin từ nhiều nguồn: {e}") 
         return []
+        
+   
+          
 
 
 # --- HÀM GỬI TIN (Giữ nguyên) ---
