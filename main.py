@@ -120,12 +120,12 @@ DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
-# --- CHỮ KÝ MUỐN THÊM ---
+# --- CHỮ KÝ MUỐN THÊM (Đã nhúng link Telegram) ---
 FOOTER_TEXT = """
-#bietdoi
+[#bietdoi](https://t.me/bietdoinews)
 ===============================
 📊 Phân tích cảm xúc bài viết từ Hệ thống AI của Biệt Đội Tài Chén
-🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
+🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
 """
 
 # Hàm xác định màu icon
@@ -278,12 +278,13 @@ def send_discord(news_items, time_str):
     description = ""
     for item in news_items:
         row = f"{item['icon']} {item['title']} - [chi tiết]({item['link']})\n\n"
-        if len(description) + len(row) + len(FOOTER_TEXT) < 4000:
+        if len(description) + len(row) + len(FOOTER_TEXT_DISCORD) < 4000: # Lưu ý: Sửa cả ở đây
             description += row
         else:
             break
             
-    description += FOOTER_TEXT
+    # THAY THẾ DÒNG CŨ: description += FOOTER_TEXT
+    description += FOOTER_TEXT_DISCORD # <-- Dùng biến mới cho Discord
 
     payload = {
         "embeds": [{
