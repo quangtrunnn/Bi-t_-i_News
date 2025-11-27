@@ -262,7 +262,7 @@ def send_telegram(news_items, time_str):
     
     for item in news_items:
         row = f"{item['icon']} {item['title']} - <a href='{item['link']}'>chi tiết</a>\n\n"
-        if len(message) + len(row) + len(FOOTER_TEXT) < 4090:
+        if len(message) + len(row) + len(FOOTER_TEXT_TELEGRAM) < 4090:
             message += row
         else:
             break
