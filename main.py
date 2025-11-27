@@ -120,9 +120,17 @@ DISCORD_WEBHOOK = os.environ.get('DISCORD_WEBHOOK')
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
-# --- CHỮ KÝ MUỐN THÊM (Đã nhúng link Telegram) ---
-FOOTER_TEXT = """
+# --- CHỮ KÝ MUỐN THÊM CHO DISCORD (CÓ LINK) ---
+FOOTER_TEXT_DISCORD = """
 [#bietdoi](https://t.me/bietdoinews)
+===============================
+📊 Phân tích cảm xúc bài viết từ Hệ thống AI của Biệt Đội Tài Chén
+🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
+"""
+
+# --- CHỮ KÝ MUỐN THÊM CHO TELEGRAM (KHÔNG LINK) ---
+FOOTER_TEXT_TELEGRAM = """
+#bietdoi
 ===============================
 📊 Phân tích cảm xúc bài viết từ Hệ thống AI của Biệt Đội Tài Chén
 🟢 Tích cực       🟡 Trung lập       🔴 Tiêu cực
@@ -259,7 +267,7 @@ def send_telegram(news_items, time_str):
         else:
             break
     
-    message += FOOTER_TEXT
+    message += FOOTER_TEXT_TELEGRAM
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {
