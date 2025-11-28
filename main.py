@@ -328,4 +328,29 @@ if __name__ == "__main__":
         save_sent_links(links_to_save) 
         
     else:
+        print("Không có tin tức mới")if __name__ == "__main__":
+    vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
+    now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
+    
+    print("Đang lấy tin tức...")
+    news_data = get_news()
+    
+    if news_data:
+        # GIỚI HẠN: Chỉ lấy MAX_ITEMS_PER_SEND (5) tin mới nhất để gửi
+        items_to_send = news_data[:MAX_ITEMS_PER_SEND]
+        
+        if not items_to_send:
+            print("Không có tin tức mới (sau khi lọc/giới hạn)")
+            exit()
+            
+        # Lấy danh sách link của các tin đã được gửi
+        links_to_save = [item['link'] for item in items_to_send]
+
+        send_telegram(items_to_send, now_str) # <-- Gửi items_to_send
+        send_discord(items_to_send, now_str)   # <-- Gửi items_to_send
+        
+        # LƯU TRẠNG THÁI: Ghi các link vừa gửi vào file để lần sau không gửi lại
+        save_sent_links(links_to_save) 
+        
+    else:
         print("Không có tin tức mới")
