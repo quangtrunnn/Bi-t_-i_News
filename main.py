@@ -3,13 +3,8 @@ import os
 import feedparser
 from datetime import datetime
 import pytz
-
-import requests
-import feedparser
-import datetime
-
-
 from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
+
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
 
@@ -17,10 +12,13 @@ SENT_LINKS_FILE = 'sent_links.txt'
 # Giới hạn độ tuổi tối đa của bài viết được phép gửi (tính theo giờ)
 # Nếu bài báo cũ hơn 12 tiếng, bot sẽ bỏ qua
 MAX_AGE_HOURS = 12
-MAX_ITEMS_PER_SEND = 5
+
+# THÊM DÒNG NÀY: Giới hạn số lượng tin gửi mỗi lần
+MAX_ITEMS_PER_SEND = 5 
+
 RSS_SOURCES = [
-    # --- 4 Nguồn cũ ---
-    # --- NGUỒN CAFEF MỚI VÀ HIỆN CÓ ---
+    # --- NGUỒN CŨ VÀ HIỆN CÓ ---
+    # XÓA NGUỒN LỖI https://baodautu.vn/tai-chinh-chung-khoan.rss
     "https://cafef.vn/thi-truong-chung-khoan.rss", # Giữ lại nguồn chính
     "https://cafef.vn/bat-dong-san.rss",
     "https://cafef.vn/doanh-nghiep.rss",
@@ -33,11 +31,11 @@ RSS_SOURCES = [
     "https://cafef.vn/tin-tuc-du-an.rss",
     "https://vietstock.vn/rss/chung-khoan.rss",
 
-    # --- 3 Nguồn mới bổ sung ---
+    # --- Nguồn bổ sung ---
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
     "https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
     
-    # --- 12 Nguồn VnEconomy mới ---
+    # --- Nguồn VnEconomy ---
     "https://vneconomy.vn/tin-moi.rss",
     "https://vneconomy.vn/tieu-diem.rss",
     "https://vneconomy.vn/chung-khoan.rss",
@@ -49,16 +47,16 @@ RSS_SOURCES = [
     "https://vneconomy.vn/kinh-te-so.rss",
     "https://vneconomy.vn/dia-oc.rss",
     "https://vneconomy.vn/kinh-te-the-gioi.rss",
-    "https://vneconomy.vn/dau-tu.rss"
+    "https://vneconomy.vn/dau-tu.rss",
 
-    # --- NGUỒN MỚI TỪ NHỊP SỐNG KINH DOANH ---
+    # --- NGUỒN TỪ NHỊP SỐNG KINH DOANH ---
     "https://nhipsongkinhdoanh.vn/rss/vang-bac-kim-loai-quy-14711.rss",
     "https://nhipsongkinhdoanh.vn/rss/tai-san-so-14191.rss",
     "https://nhipsongkinhdoanh.vn/rss/tai-chinh-6.rss", # Chỉ giữ lại 1 lần
     "https://nhipsongkinhdoanh.vn/rss/doanh-nghiep-7182.rss",
     "https://nhipsongkinhdoanh.vn/rss/kinh-doanh-11.rss",
     
-    # --- 36 NGUỒN MỚI TỪ VIETSTOCK (BỔ SUNG) ---
+    # --- NGUỒN TỪ VIETSTOCK ---
     # 1. Chứng Khoán (9 nguồn)
     "https://vietstock.vn/739/chung-khoan/giao-dich-noi-bo.rss",
     "https://vietstock.vn/830/chung-khoan/co-phieu.rss",
@@ -80,8 +78,8 @@ RSS_SOURCES = [
 
     # 3. Bất Động Sản (2 nguồn)
     "https://vietstock.vn/42221/bat-dong-san/quy-hoach-ha-tang.rss",
-    "https://vietstock.vn/4220//bat-dong-san/thi-truong-nha-dat.rss", # Link này có vẻ bị thừa '/', tôi đã giữ nguyên
-
+    "https://vietstock.vn/4220//bat-dong-san/thi-truong-nha-dat.rss",
+    
     # 4. Tài Chính (4 nguồn)
     "https://vietstock.vn/757/tai-chinh/ngan-hang.rss",
     "https://vietstock.vn/3113/tai-chinh/bao-hiem.rss",
@@ -209,9 +207,26 @@ def get_news():
         age_limit = datetime.now(pytz.utc) - timedelta(hours=MAX_AGE_HOURS)
         
         for url in RSS_SOURCES:
-            feed = feedparser.parse(url)
+            # Áp dụng Spoofing User-Agent để vượt qua rào cản 403 (Không phải tất cả)
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            # Thử parse feed với headers
+            try:
+                # Sử dụng requests để tải nội dung thô trước khi parse (tùy chọn)
+                response = requests.get(url, headers=headers, timeout=10)
+                response.raise_for_status() # Báo lỗi nếu HTTP code là 4xx hoặc 5xx
+                feed = feedparser.parse(response.content)
+            except requests.exceptions.HTTPError as errh:
+                print(f"LỖI HTTP {errh.response.status_code}: {url}")
+                continue
+            except requests.exceptions.RequestException as err:
+                print(f"LỖI KẾT NỐI {url}: {err}")
+                continue
+            except Exception:
+                # Nếu feedparser không xử lý được (như lỗi XML), bỏ qua
+                print(f"LỖI PARSE FEED: {url}")
+                continue
             
-            for entry in feed.entries[:5]:
+            for entry in feed.entries[:5]: # Chỉ xem xét 5 tin mới nhất từ mỗi nguồn
                 link = entry.link
                 date_info = entry.get('published_parsed') or entry.get('updated_parsed')
                 
@@ -252,8 +267,7 @@ def get_news():
    
           
 
-
-# --- HÀM GỬI TIN (Giữ nguyên) ---
+# --- HÀM GỬI TIN ---
 
 def send_telegram(news_items, time_str):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
@@ -287,13 +301,12 @@ def send_discord(news_items, time_str):
     description = ""
     for item in news_items:
         row = f"{item['icon']} {item['title']} - [chi tiết]({item['link']})\n\n"
-        if len(description) + len(row) + len(FOOTER_TEXT_DISCORD) < 4000: # Lưu ý: Sửa cả ở đây
+        if len(description) + len(row) + len(FOOTER_TEXT_DISCORD) < 4000:
             description += row
         else:
             break
             
-    # THAY THẾ DÒNG CŨ: description += FOOTER_TEXT
-    description += FOOTER_TEXT_DISCORD # <-- Dùng biến mới cho Discord
+    description += FOOTER_TEXT_DISCORD
 
     payload = {
         "embeds": [{
@@ -309,9 +322,9 @@ def send_discord(news_items, time_str):
     print("Đã gửi Discord")
 
 
-# --- HÀM CHÍNH ĐÃ SỬA (Lưu trạng thái mới) ---
+# --- HÀM CHÍNH ĐÃ SỬA (GIỚI HẠN SỐ LƯỢNG VÀ LƯU TRẠNG THÁI) ---
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
     vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
     now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
     
@@ -329,12 +342,11 @@ def send_discord(news_items, time_str):
         # Lấy danh sách link của các tin đã được gửi
         links_to_save = [item['link'] for item in items_to_send]
 
-        send_telegram(items_to_send, now_str) # <-- Gửi items_to_send
-        send_discord(items_to_send, now_str)   # <-- Gửi items_to_send
+        send_telegram(items_to_send, now_str) 
+        send_discord(items_to_send, now_str)   
         
         # LƯU TRẠNG THÁI: Ghi các link vừa gửi vào file để lần sau không gửi lại
         save_sent_links(links_to_save) 
         
     else:
         print("Không có tin tức mới")
-    
