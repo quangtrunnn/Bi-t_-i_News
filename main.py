@@ -146,7 +146,9 @@ def get_icon(title):
         'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức', 'động lực', 'mạnh mẽ',
         # --- BỔ SUNG MỚI ---
         'mục tiêu', 'dòng tiền', 'kích thích', 'thành công', 'hiệu quả', 'tiềm năng', 'chủ động', 
-        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng', 'bùng nổ'
+        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng', 'bùng nổ','muốn xây,'đầu tư',
+        'hồi sinh','mở rộng','ký hợp tác','đổ bộ'
+    
     ]
 
     # Keywords Tiêu cực (Bổ sung từ khóa về rủi ro, áp lực, trì trệ)
@@ -156,7 +158,8 @@ def get_icon(title):
         'khó khăn', 'suy giảm', 'vỡ nợ', 'thách thức', 'đóng băng', 'thận trọng',
         # --- BỔ SUNG MỚI ---
         'bất ổn', 'nguy cơ', 'thiếu hụt', 'rào cản', 'áp lực', 'đình trệ', 'tê liệt', 
-        'cảnh báo', 'thua lỗ', 'tụt dốc', 'phải trả', 'đổ vỡ'
+        'cảnh báo', 'thua lỗ', 'tụt dốc', 'phải trả', 'đổ vỡ','khổ trăm bề','thoái vốn', 'thoái sạch',
+        'biến động','ngõ cụt', 'thu giữ'
     ]
 
     if any(w in title_lower for w in positive_keywords):
