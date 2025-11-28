@@ -310,25 +310,8 @@ def send_discord(news_items, time_str):
 
 # --- HÀM CHÍNH ĐÃ SỬA (Lưu trạng thái mới) ---
 
-if __name__ == "__main__":
-    vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
-    now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
     
-    print("Đang lấy tin tức...")
-    news_data = get_news()
-    
-    if news_data:
-        # Lấy danh sách link của các tin sẽ gửi (chưa gửi bao giờ)
-        links_to_save = [item['link'] for item in news_data]
-
-        send_telegram(news_data, now_str)
-        send_discord(news_data, now_str)
-        
-        # LƯU TRẠNG THÁI: Ghi các link vừa gửi vào file để lần sau không gửi lại
-        save_sent_links(links_to_save) 
-        
-    else:
-        print("Không có tin tức mới")if __name__ == "__main__":
+    if __name__ == "__main__":
     vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
     now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
     
