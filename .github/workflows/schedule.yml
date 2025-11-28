@@ -5,11 +5,10 @@ on:
     # Lịch 1: Chạy mỗi 15 phút, từ 7:00 sáng đến 10:45 tối VN (0:00 - 15:45 UTC)
     - cron: '*/15 0-15 * * *'
     
-    # Lịch 2: Chạy lúc 6:30 sáng VN (23:30 UTC)
-    - cron: '30 23 * * *'
-  
-  # Chỉ khai báo một lần
-  workflow_dispatch: 
+    # Lịch 2 (Đã sửa): Chạy mỗi 15 phút, từ 6:00 sáng đến 6:45 sáng VN (23:00 UTC)
+    - cron: '*/15 23 * * *'
+    
+  workflow_dispatch:
 
 jobs:
   build:
