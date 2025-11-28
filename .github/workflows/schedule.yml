@@ -2,11 +2,13 @@ name: Stock News Bot
 
 on:
   schedule:
-    # Lịch 1: Chạy từ 07:00 sáng đến 10:30 tối VN (tương đương 00:00 - 15:30 UTC)
-    - cron: '0,15 0-15 * * *'
+    # Lịch 1: Chạy mỗi 15 phút, từ 7:00 sáng đến 10:45 tối VN (0:00 - 15:45 UTC)
+    - cron: '*/15 0-15 * * *'
     
-    # Lịch 2: Chạy vào 6:00 sáng và 6:30 sáng VN (tương đương 23:00 và 23:30 UTC)
-    - cron: '0,15 23 * * *'
+    # Lịch 2: Chạy lúc 6:30 sáng VN (23:30 UTC)
+    - cron: '30 23 * * *' 
+  
+  workflow_dispatch:
 
   workflow_dispatch:
 
