@@ -3,10 +3,10 @@ name: Stock News Bot
 on:
   schedule:
     # Lịch 1: Chạy từ 07:00 sáng đến 10:30 tối VN (tương đương 00:00 - 15:30 UTC)
-    - cron: '0,30 0-15 * * *'
+    - cron: '0,15 0-15 * * *'
     
     # Lịch 2: Chạy vào 6:00 sáng và 6:30 sáng VN (tương đương 23:00 và 23:30 UTC)
-    - cron: '0,30 23 * * *'
+    - cron: '0,15 23 * * *'
 
   workflow_dispatch:
 
