@@ -33,7 +33,7 @@ RSS_SOURCES = [
 
     # --- Nguồn bổ sung ---
     "https://vnexpress.net/rss/kinh-doanh.rss",                  # VnExpress
-    "https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
+    #"https://tinnhanhchungkhoan.vn/rss/tin-moi-nhat.rss",        # Đầu tư Chứng khoán
     
     # --- Nguồn VnEconomy ---
     "https://vneconomy.vn/tin-moi.rss",
