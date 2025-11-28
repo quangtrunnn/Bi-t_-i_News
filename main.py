@@ -17,6 +17,7 @@ SENT_LINKS_FILE = 'sent_links.txt'
 # Giới hạn độ tuổi tối đa của bài viết được phép gửi (tính theo giờ)
 # Nếu bài báo cũ hơn 12 tiếng, bot sẽ bỏ qua
 MAX_AGE_HOURS = 12
+MAX_ITEMS_PER_SEND = 5
 RSS_SOURCES = [
     # --- 4 Nguồn cũ ---
     # --- NGUỒN CAFEF MỚI VÀ HIỆN CÓ ---
@@ -310,7 +311,6 @@ def send_discord(news_items, time_str):
 
 # --- HÀM CHÍNH ĐÃ SỬA (Lưu trạng thái mới) ---
 
-    
     if __name__ == "__main__":
     vn_tz = pytz.timezone('Asia/Ho_Chi_Minh')
     now_str = datetime.now(vn_tz).strftime("%H:%M %d/%m")
@@ -337,3 +337,4 @@ def send_discord(news_items, time_str):
         
     else:
         print("Không có tin tức mới")
+    
