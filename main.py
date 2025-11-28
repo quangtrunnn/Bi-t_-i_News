@@ -146,7 +146,7 @@ def get_icon(title):
         'kỷ lục', 'giải ngân', 'thu hút', 'phục hồi', 'chính thức', 'động lực', 'mạnh mẽ',
         # --- BỔ SUNG MỚI ---
         'mục tiêu', 'dòng tiền', 'kích thích', 'thành công', 'hiệu quả', 'tiềm năng', 'chủ động', 
-        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng', 'bùng nổ','muốn xây,'đầu tư',
+        'được phê duyệt', 'bứt phá', 'tăng tốc', 'tích cực', 'nới lỏng', 'bùng nổ','muốn xây','đầu tư',
         'hồi sinh','mở rộng','ký hợp tác','đổ bộ'
     
     ]
