@@ -6,11 +6,10 @@ on:
     - cron: '*/15 0-15 * * *'
     
     # Lịch 2: Chạy lúc 6:30 sáng VN (23:30 UTC)
-    - cron: '30 23 * * *' 
+    - cron: '30 23 * * *'
   
-  workflow_dispatch:
-
-  workflow_dispatch:
+  # Chỉ khai báo một lần
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -23,7 +22,6 @@ jobs:
         uses: actions/cache@v3
         with:
           path: sent_links.txt
-          # Sử dụng hash của main.py làm key để nếu bạn thay đổi main.py, cache sẽ được làm mới
           key: ${{ runner.os }}-sent-links-${{ hashFiles('main.py') }} 
 
       # 2. Checkout code (Giữ nguyên)
@@ -49,7 +47,6 @@ jobs:
         run: python main.py
         
       # 6. LƯU CACHE (SAVE): LƯU file sent_links.txt mới
-      # BƯỚC NÀY KHẮC PHỤC HOÀN TOÀN LỖI LẶP TIN
       - name: Save Sent Links Cache
         uses: actions/cache@v3
         # if: always() đảm bảo bước này chạy kể cả khi bot không tìm thấy tin mới (để lưu cache)
