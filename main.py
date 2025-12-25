@@ -8,7 +8,7 @@ from datetime import datetime, timedelta # Cần phải import thêm timedelta �
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
 
-# --- CẤU HÌNH ---
+# --- CẤU HÌNH ---------------------
 # Giới hạn độ tuổi tối đa của bài viết được phép gửi (tính theo giờ)
 # Nếu bài báo cũ hơn 12 tiếng, bot sẽ bỏ qua
 MAX_AGE_HOURS = 12
