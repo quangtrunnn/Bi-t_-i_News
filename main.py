@@ -14,7 +14,7 @@ SENT_LINKS_FILE = 'sent_links.txt'
 MAX_AGE_HOURS = 12
 
 # THÊM DÒNG NÀY: Giới hạn số lượng tin gửi mỗi lần
-MAX_ITEMS_PER_SEND = 5 
+MAX_ITEMS_PER_SEND = 10 
 
 RSS_SOURCES = [
     # --- NGUỒN CŨ VÀ HIỆN CÓ ---
