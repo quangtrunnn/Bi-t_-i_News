@@ -11,7 +11,7 @@ SENT_LINKS_FILE = 'sent_links.txt'
 # --- CẤU HÌNH ---------------------
 # Giới hạn độ tuổi tối đa của bài viết được phép gửi (tính theo giờ)
 # Nếu bài báo cũ hơn 12 tiếng, bot sẽ bỏ qua
-MAX_AGE_HOURS = 12
+MAX_AGE_HOURS = 5
 
 # THÊM DÒNG NÀY: Giới hạn số lượng tin gửi mỗi lần
 MAX_ITEMS_PER_SEND = 10 
