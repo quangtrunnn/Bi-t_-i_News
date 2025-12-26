@@ -4,6 +4,7 @@ import feedparser
 from datetime import datetime
 import pytz
 from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
+import time # Nhớ thêm import này ở đầu file nếu chưa có
 
 # Tên file lưu trữ các link đã gửi (Trạng thái)
 SENT_LINKS_FILE = 'sent_links.txt' 
@@ -263,20 +264,20 @@ def get_news():
           
 
 # --- HÀM GỬI TIN ---
-
 def send_telegram(news_items, time_str):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("Thiếu cấu hình Telegram Secrets!")
         return
 
+    # Chuẩn bị nội dung tin nhắn
     message = f"<b>🔔 CẬP NHẬT THÔNG TIN THỊ TRƯỜNG {time_str}</b>\n\n"
-    
     for item in news_items:
         row = f"{item['icon']} {item['title']} - <a href='{item['link']}'>chi tiết</a>\n\n"
-        if len(message) + len(row) + len(FOOTER_TEXT_TELEGRAM) < 4090:
+        # Giới hạn an toàn của Telegram là 4096 ký tự
+        if len(message) + len(row) + len(FOOTER_TEXT_TELEGRAM) < 4000:
             message += row
         else:
             break
-    
     message += FOOTER_TEXT_TELEGRAM
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
@@ -286,8 +287,24 @@ def send_telegram(news_items, time_str):
         "parse_mode": "HTML",
         "disable_web_page_preview": True
     }
-    requests.post(url, json=payload)
-    print("Đã gửi Telegram")
+
+    # --- CƠ CHẾ THỬ LẠI (RETRY) ---
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            # Thêm timeout=20 để không bị treo nếu mạng chậm
+            response = requests.post(url, json=payload, timeout=20)
+            response.raise_for_status()
+            print("✅ Đã gửi Telegram thành công!")
+            return # Thoát hàm nếu thành công
+        except Exception as e:
+            print(f"⚠️ Lần thử {attempt + 1} thất bại: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(10) # Đợi 10 giây trước khi thử lại
+            else:
+                print("❌ Đã thử 3 lần nhưng vẫn không thể gửi Telegram.")
+
+
 
 def send_discord(news_items, time_str):
     if not DISCORD_WEBHOOK:
