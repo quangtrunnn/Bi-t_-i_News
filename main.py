@@ -293,7 +293,7 @@ def send_telegram(news_items, time_str):
     for attempt in range(max_retries):
         try:
             # Thêm timeout=20 để không bị treo nếu mạng chậm
-            response = requests.post(url, json=payload, timeout=20)
+            response = requests.post(url, json=payload, timeout=30)
             response.raise_for_status()
             print("✅ Đã gửi Telegram thành công!")
             return # Thoát hàm nếu thành công
