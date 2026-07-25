@@ -6,7 +6,7 @@ import pytz
 from datetime import datetime, timedelta # Cần phải import thêm timedelta ở đầu file
 import time # Nhớ thêm import này ở đầu file nếu chưa có
 #Update6/13/2026
-# Tên file lưu trữ các link đã gửi (Trạng thái) ##########################################Chỉnh sửa lần 1 18/02/2026
+# Track log 25/7/2026
 SENT_LINKS_FILE = 'sent_links.txt' 
 
 # --- CẤU HÌNH ---------------------------------------------------
